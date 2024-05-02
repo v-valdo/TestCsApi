@@ -3,12 +3,13 @@ Globals = Obj(new
 {
     debugOn = true,
     detailedAclDebug = false,
-    aclOn = true,
+    aclOn = false,
     isSpa = true,
     port = 3001,
-    serverName = "Ironboy's Minimal API Server",
+    serverName = "Valles Server",
     frontendPath = Path.Combine("..", "Frontend"),
     sessionLifeTimeHours = 2
 });
 
-Server.Start();
+//Server.Start();
+//new UtilsTest().TestCreateMockUsers();
