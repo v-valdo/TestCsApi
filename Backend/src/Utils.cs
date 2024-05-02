@@ -20,11 +20,15 @@ public static class Utils
     }
 
     // METOD 2
-    public static string RemoveBadWords(string text)
+    public static string RemoveBadWords(string badText, string niceWord)
     {
-        string textToCheck = text.ToLower();
-        // JSON.Parse(
-        return "VeryBadWord";
+        var badWordsFromFile = File.ReadAllText(Path.Combine("json", "bad-words.json"));
+        Arr badWords = JSON.Parse(badWordsFromFile);
+
+        string niceText = Regex.Replace(badText, "\\b" + string.Join("\\b|\\b", badWords) + "\\b", niceWord);
+
+        //string niceText = badText.Replace(badWords.ToString(), niceWord);
+        return niceText;
     }
 
     // METOD 3

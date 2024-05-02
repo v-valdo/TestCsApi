@@ -2,26 +2,27 @@ namespace WebApp;
 using Xunit;
 public class UtilsTest
 {
-    // [Fact]
-    // public void TestIntSum()
-    // {
-    //     // Arrange
-    //     // Act
-    //     // Assert
-
-    //     Assert.Equal(5, Utils.SumInts(1, 4));
-    //     Assert.Equal(-3, Utils.SumInts(6, -9));
-    // }
-
     // METOD 1 
     [Fact]
     public void TestIsPasswordStrongEnough()
     {
-        string password = "testPassword1345%";
-        Assert.True(Utils.IsPasswordStrongEnough(password));
+        string badPassword = "testPassword1234";
+        string goodPassword = "testPassword1345%";
+        Assert.True(Utils.IsPasswordStrongEnough(goodPassword));
+        Assert.False(Utils.IsPasswordStrongEnough(badPassword));
     }
 
-    // METOD 2
+    // metod 2
+    [Fact]
+    public void TestRemoveBadWords()
+    {
+        string badText = "fuck you, you shit";
+        string replacement = "happy bunnies";
+        string goodText = "happy bunnies you, you happy bunnies";
+        Assert.Equal(goodText, Utils.RemoveBadWords(badText, replacement));
+    }
+
+    // METOD 3
     // [Fact]
     // public void TestCreateMockUsers()
     // {

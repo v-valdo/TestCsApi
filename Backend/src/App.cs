@@ -13,3 +13,10 @@ Globals = Obj(new
 
 //Server.Start();
 //new UtilsTest().TestCreateMockUsers();
+
+// var badWordsFromFile = File.ReadAllText(Path.Combine("json", "bad-words.json"));
+// Arr badWords = JSON.Parse(badWordsFromFile);
+// Console.WriteLine(badWords.ToString());
+
+string test = WebApp.Utils.RemoveBadWords("fuck you you fucking whore ass motherfucker", "nice bunnies");
+Console.WriteLine(test);
