@@ -36,9 +36,19 @@ public static class Utils
         var read = File.ReadAllText(FilePath("json", "mock-users.json"));
         Arr mockUsers = JSON.Parse(read);
         Arr successFullyWrittenUsers = Arr();
+
         foreach (var user in mockUsers)
         {
             user.password = "12345678";
+            // user.password = GeneratePasswordFromEmail(user.email);
+            // if (!IsPasswordStrongEnough(user.password))
+            // {
+            //     user.password = "InsecurePassword";
+            // }
+            // else
+            // {
+            //     user.password = Password.Encrypt(user.password);
+            // }
             var result = SQLQueryOne(
                 @"INSERT INTO users(firstName,lastName,email,password)
                 VALUES($firstName, $lastName, $email, $password)
@@ -53,5 +63,23 @@ public static class Utils
             }
         }
         return successFullyWrittenUsers;
+    }
+    public static string GeneratePasswordFromEmail(string email)
+    {
+        return char.ToUpper(email[0]) + email.Substring(1);
+    }
+
+    // metod 4
+
+    public static void RemoveMockUsers()
+    {
+        var addedMockUsers = CreateMockUsers();
+        var usersAddedToDb = SQLQuery(@"
+        select firstName, lastName from users;
+        ");
+        var removeMockUsers = SQLQueryOne(@"
+        delete from users where firstName = $firstName
+        ");
+
     }
 }

@@ -18,4 +18,6 @@ Globals = Obj(new
 // Remove the comments for this line and comment out "Server.Start()":
 // new UtilsTest().TestCreateMockUsers();
 
-Server.Start();
+// Server.Start();
+
+WebApp.Utils.CreateMockUsers();
