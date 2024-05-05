@@ -1,15 +1,29 @@
 namespace WebApp;
 using Xunit;
+using Xunit.Abstractions;
 public class UtilsTest
 {
-    // METOD 1 
-    [Fact]
-    public void TestIsPasswordStrongEnough()
+    // The following lines are needed to get 
+    // output to the Console to work in xUnit tests!
+    // (also needs the using Xunit.Abstractions)
+    // Note: You need to use the following command line command 
+    // dotnet test --logger "console;verbosity=detailed"
+    // for the logging to work
+    private readonly ITestOutputHelper output;
+    public UtilsTest(ITestOutputHelper output)
     {
-        string badPassword = "testPassword1234";
-        string goodPassword = "testPassword1345%";
-        Assert.True(Utils.IsPasswordStrongEnough(goodPassword));
-        Assert.False(Utils.IsPasswordStrongEnough(badPassword));
+        this.output = output;
+    }
+
+    // METOD 1 
+    [Theory]
+    [InlineData("testPassword1234", false)]
+    [InlineData("testPassword1234%", true)]
+    [InlineData("testPa!", false)]
+
+    public void TestIsPasswordStrongEnough(string password, bool result)
+    {
+        Assert.Equal(Utils.IsPasswordStrongEnough(password), result);
     }
 
     // metod 2
@@ -23,30 +37,28 @@ public class UtilsTest
     }
 
     // METOD 3
-    // [Fact]
-    // public void TestCreateMockUsers()
-    // {
-    //     var read = File.ReadAllText(Path.Combine("json", "mock-users.json"));
-    //     Arr usersFromFile = JSON.Parse(read);
-    //     // gets all users from db
-    //     Arr usersInDb = SQLQuery("select email from users");
-    //     Arr emailsInDb = usersInDb.Map(user => user.email);
-    //     // only keeps mockusers NOT already in db
-    //     Arr mockUsersNotInDb = usersFromFile.Filter(
-    //         u => !emailsInDb.Contains(u.email));
-
-    //     // Assert create mockusers ONLY returns newly created users in db
-    //     var result = Utils.CreateMockUsers();
-    //     // Log("calculated by test", mockUsersNotInDb);
-    //     // Log("reported by method", result);
-
-    //     // assert same length
-    //     Assert.Equal(mockUsersNotInDb.Length, result.Length);
-
-    //     // check equivalency
-    //     for (int i = 0; i < result.Length; i++)
-    //     {
-    //         Assert.Equivalent(mockUsersNotInDb[i], result[i]);
-    //     }
-    // }
+    [Fact]
+    public void TestCreateMockUsers()
+    {
+        // Read all mock users from the JSON file
+        var read = File.ReadAllText(FilePath("json", "mock-users.json"));
+        Arr mockUsers = JSON.Parse(read);
+        // Get all users from the database
+        Arr usersInDb = SQLQuery("SELECT email FROM users");
+        Arr emailsInDb = usersInDb.Map(user => user.email);
+        // Only keep the mock users not already in db
+        Arr mockUsersNotInDb = mockUsers.Filter(
+            mockUser => !emailsInDb.Contains(mockUser.email)
+        );
+        // Get the result of running the method in our code
+        var result = Utils.CreateMockUsers();
+        // Assert that the CreateMockUsers only return
+        // newly created users in the db
+        output.WriteLine($"The test expected that {mockUsersNotInDb.Length} users should be added.");
+        output.WriteLine($"And {result.Length} users were added.");
+        output.WriteLine("The test also asserts that the users added " +
+            "are equivalent (the same) to the expected users!");
+        Assert.Equivalent(mockUsersNotInDb, result);
+        output.WriteLine("The test passed!");
+    }
 }

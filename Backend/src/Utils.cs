@@ -1,7 +1,6 @@
 namespace WebApp;
 public static class Utils
 {
-
     // Exempelmetod för Testning
     public static int SumInts(int a, int b)
     {
@@ -27,28 +26,28 @@ public static class Utils
 
         string niceText = Regex.Replace(badText, "\\b" + string.Join("\\b|\\b", badWords) + "\\b", niceWord);
 
-        //string niceText = badText.Replace(badWords.ToString(), niceWord);
         return niceText;
     }
 
     // METOD 3
     public static Arr CreateMockUsers()
     {
-        var read = File.ReadAllText(Path.Combine("json", "mock-users.json"));
-        Arr usersFromFile = JSON.Parse(read);
+        // Read all mock users from the JSON file
+        var read = File.ReadAllText(FilePath("json", "mock-users.json"));
+        Arr mockUsers = JSON.Parse(read);
         Arr successFullyWrittenUsers = Arr();
-        foreach (var user in usersFromFile)
+        foreach (var user in mockUsers)
         {
             user.password = "12345678";
-            var result = SQLQueryOne(@"
-            insert into users(firstName, lastName, email, password)
-            values($firstName, $lastName, $email, $password)
+            var result = SQLQueryOne(
+                @"INSERT INTO users(firstName,lastName,email,password)
+                VALUES($firstName, $lastName, $email, $password)
             ", user);
-            // if query gives error, then mock users havent been added
-            // if not we have - and add to successful list
+            // If we get an error from the DB then we haven't added
+            // the mock users, if not we have so add to the successful list
             if (!result.HasKey("error"))
             {
-                // specs asks for user list w/o password
+                // The specification says return the user list without password
                 user.Delete("password");
                 successFullyWrittenUsers.Push(user);
             }

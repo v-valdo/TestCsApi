@@ -6,17 +6,16 @@ Globals = Obj(new
     aclOn = false,
     isSpa = true,
     port = 3001,
-    serverName = "Valles Server",
-    frontendPath = Path.Combine("..", "Frontend"),
+    serverName = "Ironboy's Minimal API Server",
+    frontendPath = FilePath("..", "Frontend"),
     sessionLifeTimeHours = 2
 });
 
-//Server.Start();
-//new UtilsTest().TestCreateMockUsers();
+// Example of how you can run tests as if they were part of the main program
+// This solves the problem with console output not working when running tests
+// using "dotnet test". But in the end we want to run the tests by calling
+// "dotnet test" - so it's only useful during the development of the tests!
+// Remove the comments for this line and comment out "Server.Start()":
+// new UtilsTest().TestCreateMockUsers();
 
-// var badWordsFromFile = File.ReadAllText(Path.Combine("json", "bad-words.json"));
-// Arr badWords = JSON.Parse(badWordsFromFile);
-// Console.WriteLine(badWords.ToString());
-
-string test = WebApp.Utils.RemoveBadWords("fuck you you fucking whore ass motherfucker", "nice bunnies");
-Console.WriteLine(test);
+Server.Start();
