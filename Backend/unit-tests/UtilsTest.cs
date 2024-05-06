@@ -59,10 +59,40 @@ public class UtilsTest
 
     // method 3.5
     [Fact]
-    public void TestEncryption()
+    public void TestPasswordGenerationAndEncryption()
     {
-        Random rnd = new();
-        Arr passwordsInDb = SQLQuery("select password from users");
-
+        Arr users = SQLQuery("select email, password from users limit 10");
+        foreach (var user in users)
+        {
+            string passswordBeforeEncryption = Utils.GeneratePasswordFromEmail(user.email) + "1";
+            output.WriteLine("before encr: " + passswordBeforeEncryption);
+            string encryptedPassword = Password.Encrypt(passswordBeforeEncryption);
+            Assert.True(Password.Verify(passswordBeforeEncryption, encryptedPassword));
+        }
     }
+
+    // method 4
+    [Fact]
+    public void TestRemoveMockUsers()
+    {
+        var read = File.ReadAllText(FilePath("json", "mock-users.json"));
+        Arr mockUsers = JSON.Parse(read);
+        var removedMockUsers = Utils.RemoveMockUsers();
+
+        Arr removedMockUserEmails = removedMockUsers.Map(user => user.email);
+
+        Arr remainingUsersInDb = SQLQuery("select email from users");
+
+        foreach (var user in removedMockUsers)
+        {
+            Assert.DoesNotContain(user.email, remainingUsersInDb.Map(u => u.email));
+        }
+
+        Assert.Equivalent(mockUsers, removedMockUsers);
+
+        output.WriteLine($"{removedMockUsers.Length} mock users removed from db");
+        output.WriteLine("test passed");
+    }
+
+    // method 5
 }

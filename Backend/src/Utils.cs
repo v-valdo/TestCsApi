@@ -45,7 +45,7 @@ public static class Utils
             // had to create an anonymous object for passing in user.email 
             var existingUser = SQLQueryOne(
                @"select * from users where email = $email",
-            new { user.email });
+            user);
 
             if (existingUser == null)
             {
@@ -89,16 +89,31 @@ public static class Utils
     }
 
     // metod 4
-
-    public static void RemoveMockUsers()
+    public static Arr RemoveMockUsers()
     {
-        var addedMockUsers = CreateMockUsers();
-        var usersAddedToDb = SQLQuery(@"
-        select firstName, lastName from users;
-        ");
-        var removeMockUsers = SQLQueryOne(@"
-        delete from users where firstName = $firstName
-        ");
+        var read = File.ReadAllText(FilePath("json", "mock-users.json"));
+        Arr mockUsers = JSON.Parse(read);
+        Arr removedMockUsers = Arr();
 
+        foreach (var user in mockUsers)
+        {
+            var result = SQLQueryOne(
+                @"delete from users where firstName = $firstName and lastName = $lastName",
+                user);
+
+            if (!result.HasKey("error"))
+            {
+                user.Delete("password");
+                removedMockUsers.Push(user);
+            }
+        }
+        // return w/o pw
+        return removedMockUsers;
+    }
+
+    // method 5
+    public static Arr CountDomainsFromUserEmails()
+    {
+        return Arr();
     }
 }
