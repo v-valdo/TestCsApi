@@ -3,12 +3,6 @@ using Xunit;
 namespace WebApp;
 public static class Utils
 {
-    // Exempelmetod för Testning
-    public static int SumInts(int a, int b)
-    {
-        return a + b;
-    }
-
     // METOD 1
     public static bool IsPasswordStrongEnough(string password)
     {
