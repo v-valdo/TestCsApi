@@ -112,8 +112,27 @@ public static class Utils
     }
 
     // method 5
-    public static Arr CountDomainsFromUserEmails()
+    public static Obj CountDomainsFromUserEmails()
     {
-        return Arr();
+        var users = SQLQuery("select email from users");
+        Obj domains = new Obj();
+        foreach (var user in users)
+        {
+            string domain = RetrieveEmailDomain(user.email);
+            if (domains.HasKey(domain))
+            {
+                domains[domain]++;
+            }
+            else
+            {
+                domains[domain] = 1;
+            }
+        }
+        return domains;
+    }
+    public static string RetrieveEmailDomain(string email)
+    {
+        int domainLocation = email.IndexOf('@');
+        return email.Substring(domainLocation + 1, email.Length - domainLocation - 1);
     }
 }

@@ -95,4 +95,25 @@ public class UtilsTest
     }
 
     // method 5
+    [Fact]
+    public void TestCountDomainsFromUserEmails()
+    {
+        var domainsObject = Utils.CountDomainsFromUserEmails();
+        var uniqueEmails = SQLQuery("select distinct email FROM users");
+
+        foreach (var emailValue in uniqueEmails)
+        {
+            string email = (string)emailValue["email"];
+            Assert.True(domainsObject.HasKey(Utils.RetrieveEmailDomain(email)));
+        }
+    }
+
+    // method 5.5
+    [Fact]
+    public void TestRetrieveEmailDomain()
+    {
+        string username = "iAmAUser";
+        string domain = "iAmADomain.com";
+        Assert.Equal(domain, Utils.RetrieveEmailDomain(username + "@" + domain));
+    }
 }
