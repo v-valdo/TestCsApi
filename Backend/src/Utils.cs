@@ -1,3 +1,5 @@
+using Xunit;
+
 namespace WebApp;
 public static class Utils
 {
@@ -39,31 +41,48 @@ public static class Utils
 
         foreach (var user in mockUsers)
         {
-            user.password = "12345678";
-            // user.password = GeneratePasswordFromEmail(user.email);
-            // if (!IsPasswordStrongEnough(user.password))
-            // {
-            //     user.password = "InsecurePassword";
-            // }
-            // else
-            // {
-            //     user.password = Password.Encrypt(user.password);
-            // }
-            var result = SQLQueryOne(
-                @"INSERT INTO users(firstName,lastName,email,password)
+            // check if user already in database
+            // had to create an anonymous object for passing in user.email 
+            var existingUser = SQLQueryOne(
+               @"select * from users where email = $email",
+            new { user.email });
+
+            if (existingUser == null)
+            {
+                // if user null, encrypt pw
+                user.password = GeneratePasswordFromEmail(user.email) + "1";
+                if (!IsPasswordStrongEnough(user.password))
+                {
+                    user.password = "InsecurePassword";
+                }
+                else
+                {
+                    user.password = Password.Encrypt(user.password);
+                }
+                var result = SQLQueryOne(
+                    @"INSERT INTO users(firstName,lastName,email,password)
                 VALUES($firstName, $lastName, $email, $password)
             ", user);
-            // If we get an error from the DB then we haven't added
-            // the mock users, if not we have so add to the successful list
-            if (!result.HasKey("error"))
+
+                // If we get an error from the DB then we haven't added
+                // the mock users, if not we have so add to the successful list
+                if (!result.HasKey("error"))
+                {
+                    // The specification says return the user list without password
+                    user.Delete("password");
+                    successFullyWrittenUsers.Push(user);
+                }
+            }
+            else
             {
-                // The specification says return the user list without password
+                // User already exists, add to successful list without encryption
                 user.Delete("password");
                 successFullyWrittenUsers.Push(user);
             }
         }
         return successFullyWrittenUsers;
     }
+
     public static string GeneratePasswordFromEmail(string email)
     {
         return char.ToUpper(email[0]) + email.Substring(1);

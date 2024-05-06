@@ -3,12 +3,6 @@ using Xunit;
 using Xunit.Abstractions;
 public class UtilsTest
 {
-    // The following lines are needed to get 
-    // output to the Console to work in xUnit tests!
-    // (also needs the using Xunit.Abstractions)
-    // Note: You need to use the following command line command 
-    // dotnet test --logger "console;verbosity=detailed"
-    // for the logging to work
     private readonly ITestOutputHelper output;
     public UtilsTest(ITestOutputHelper output)
     {
@@ -27,13 +21,12 @@ public class UtilsTest
     }
 
     // metod 2
-    [Fact]
-    public void TestRemoveBadWords()
+    [Theory]
+    [InlineData("fuck you, you shit", "happy bunnies", "happy bunnies you, you happy bunnies")]
+    [InlineData("asshole, i dont like you bitch", "flowers", "flowers, i dont like you flowers")]
+    public void TestRemoveBadWords(string badText, string replacement, string niceText)
     {
-        string badText = "fuck you, you shit";
-        string replacement = "happy bunnies";
-        string goodText = "happy bunnies you, you happy bunnies";
-        Assert.Equal(goodText, Utils.RemoveBadWords(badText, replacement));
+        Assert.Equal(niceText, Utils.RemoveBadWords(badText, replacement));
     }
 
     // METOD 3
@@ -51,7 +44,9 @@ public class UtilsTest
             mockUser => !emailsInDb.Contains(mockUser.email)
         );
         // Get the result of running the method in our code
+        // WILL take 5-10 min if no users added due to encryption
         var result = Utils.CreateMockUsers();
+
         // Assert that the CreateMockUsers only return
         // newly created users in the db
         output.WriteLine($"The test expected that {mockUsersNotInDb.Length} users should be added.");
@@ -60,5 +55,14 @@ public class UtilsTest
             "are equivalent (the same) to the expected users!");
         Assert.Equivalent(mockUsersNotInDb, result);
         output.WriteLine("The test passed!");
+    }
+
+    // method 3.5
+    [Fact]
+    public void TestEncryption()
+    {
+        Random rnd = new();
+        Arr passwordsInDb = SQLQuery("select password from users");
+
     }
 }
