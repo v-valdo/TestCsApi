@@ -43,16 +43,17 @@ public static class Utils
 
             if (existingUser == null)
             {
-                // if user null, encrypt pw
-                user.password = GeneratePasswordFromEmail(user.email) + "1";
+                //// ---> Uncomment comments below to RUN encryption!! <<<-
+
+                // user.password = GeneratePasswordFromEmail(user.email) + "1";
                 if (!IsPasswordStrongEnough(user.password))
                 {
                     user.password = "InsecurePassword";
                 }
-                else
-                {
-                    user.password = Password.Encrypt(user.password);
-                }
+                // else
+                // {
+                //     user.password = Password.Encrypt(user.password);
+                // }
                 var result = SQLQueryOne(
                     @"INSERT INTO users(firstName,lastName,email,password)
                 VALUES($firstName, $lastName, $email, $password)

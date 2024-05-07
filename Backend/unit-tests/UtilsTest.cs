@@ -72,7 +72,8 @@ public class UtilsTest
     }
 
     // method 4
-    [Fact(Skip = "improve time")]
+    // [Fact(Skip = "improveTime")] // to skip!
+    [Fact]
     public void TestRemoveMockUsers()
     {
         var read = File.ReadAllText(FilePath("json", "mock-users.json"));
@@ -95,7 +96,6 @@ public class UtilsTest
     }
 
     // method 5
-
     [Fact]
     public void TestCountDomainsFromUserEmails()
     {
