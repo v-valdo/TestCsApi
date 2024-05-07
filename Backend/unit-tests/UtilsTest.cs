@@ -1,14 +1,6 @@
 namespace WebApp;
-using Xunit;
-using Xunit.Abstractions;
-public class UtilsTest
+public class UtilsTest(xLog output)
 {
-    private readonly ITestOutputHelper output;
-    public UtilsTest(ITestOutputHelper output)
-    {
-        this.output = output;
-    }
-
     // METOD 1 
     [Theory]
     [InlineData("testPassword1234", false)]
