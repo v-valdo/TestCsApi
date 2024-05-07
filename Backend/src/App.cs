@@ -3,17 +3,16 @@ Globals = Obj(new
 {
     debugOn = true,
     detailedAclDebug = false,
-    aclOn = false,
+    aclOn = true,
     isSpa = true,
     port = 3001,
-    serverName = "Ironboy's Minimal API Server",
+    serverName = "Valles Mini-API",
     frontendPath = FilePath("..", "Frontend"),
     sessionLifeTimeHours = 2
 });
+// output obj w/ unique domains + count
+// Log(WebApp.Utils.CountDomainsFromUserEmails());
 
-// Server.Start();
 
-WebApp.Utils.CreateMockUsers();
-// WebApp.Utils.RemoveMockUsers();
+Server.Start();
 
-Log(WebApp.Utils.CountDomainsFromUserEmails());
