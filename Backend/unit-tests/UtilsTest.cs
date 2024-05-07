@@ -85,6 +85,9 @@ public class UtilsTest(xLog output)
 
         output.WriteLine($"{removedMockUsers.Length} mock users removed from db");
         output.WriteLine("test passed");
+
+        // add users back
+        Utils.CreateMockUsers();
     }
 
     // method 5
