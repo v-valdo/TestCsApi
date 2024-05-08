@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "newman run Example.postman_collection.json"
+    "test": "newman run EndPointTest.postman_collection.json"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "newman": "6.1.2"
+    "newman": "^6.1.2"
   }
 }
