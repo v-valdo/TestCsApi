@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "8a61c879-ac49-4ad2-a3ad-0c5118f39097",
+		"_postman_id": "7632cc28-3274-460c-a912-a501d93e3225",
 		"name": "Example",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "30881265"
+		"_exporter_id": "34760409"
 	},
 	"item": [
 		{
@@ -21,10 +21,13 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3001/api/login",
+					"raw": "http://127.0.0.1:3001/api/login",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
 					"port": "3001",
 					"path": [
@@ -51,8 +54,12 @@
 							"      \"description\": \"Färska grönsaker.\"",
 							"    },",
 							"    {",
-							"      \"name\": \"Grönsaker\",",
+							"      \"name\": \"Frukter\",",
 							"      \"description\": \"Färska frukter.\"",
+							"    },",
+							"    {",
+							"      \"name\": \"Rengöringsprodukter\",",
+							"      \"description\": \"Allt du behöver för att hålla hemmet rent.\"",
 							"    }",
 							"  ],",
 							"  \"products\": [],",
@@ -83,10 +90,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001",
+					"raw": "http://127.0.0.1:3001",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
 					"port": "3001"
 				}
@@ -119,7 +129,7 @@
 							"// also add the id in our test data (for future tests)",
 							"pm.test(\"We should get an insertId back\", () => {",
 							"    pm.expect(responseData.insertId).to.be.a('number');",
-							"    // Add the id",
+							"    // Add the property id to the category with the id received from REST-api",
 							"    category.id = responseData.insertId;",
 							"    // Log",
 							"    console.log(\"The category has been created\", category);",
@@ -138,6 +148,8 @@
 							"// Otherwise console.log \"All done\"",
 							"else {",
 							"    console.log(\"All categories have been created.\");",
+							"    testData.counter = 0;",
+							"    pm.collectionVariables.set(\"testData\",testData);",
 							"}"
 						],
 						"type": "text/javascript",
@@ -148,9 +160,13 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
+							"// Get the test data",
 							"let testData = pm.collectionVariables.get(\"testData\");",
+							"// Get the current category",
 							"let category = testData.categories[testData.counter];",
 							"",
+							"// pm variables have a scope of one request",
+							"// setting two variables used in body",
 							"pm.variables.set(\"name\", category.name);",
 							"pm.variables.set(\"description\", category.description);"
 						],
@@ -172,15 +188,104 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3001/api/categories",
+					"raw": "http://127.0.0.1:3001/api/categories",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
 					"port": "3001",
 					"path": [
 						"api",
 						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get categories",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Get the test data\r",
+							"let testData = pm.collectionVariables.get(\"testData\");\r",
+							"// Get the current category\r",
+							"let category = testData.categories[testData.counter];\r",
+							"// Set  a pm variable to id (used in the URL)\r",
+							"pm.variables.set(\"id\", category.id);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Get the test data\r",
+							"let testData = pm.collectionVariables.get(\"testData\");\r",
+							"// Get the current category\r",
+							"let category = testData.categories[testData.counter];\r",
+							"\r",
+							"// Read the response\r",
+							"let response = pm.response;\r",
+							"// Read the response data\r",
+							"let responseData = pm.response.json();\r",
+							"\r",
+							"// Test that we get a 200 code (ok request) back\r",
+							"pm.test(\"We should get an ok (code 200) back\",()=> {\r",
+							"    pm.expect(response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"// test that rest api serves matching data as our testdata for category\r",
+							"pm.test(\"Matching return data from API\", ()=> \r",
+							"{\r",
+							"    pm.expect(category).to.deep.equal(responseData);\r",
+							"});\r",
+							"\r",
+							"// Update the counter and save the updated test data\r",
+							"testData.counter++;\r",
+							"pm.collectionVariables.set(\"testData\",testData);\r",
+							"\r",
+							"// If there are more categories - then \"loop\"\r",
+							"// through them using setNextRequest\r",
+							"if(testData.categories[testData.counter]){\r",
+							"    pm.execution.setNextRequest(\"get categories\");\r",
+							"}\r",
+							"// Otherwise console.log \"All done\"\r",
+							"else {\r",
+							"    console.log(\"All categories have been checked.\");\r",
+							"    testData.counter = 0;\r",
+							"    pm.collectionVariables.set(\"testData\",testData);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:3001/api/categories/{{id}}",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"categories",
+						"{{id}}"
 					]
 				}
 			},
