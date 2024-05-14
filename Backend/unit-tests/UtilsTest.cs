@@ -18,6 +18,8 @@ public class UtilsTest(xLog output)
     [Theory]
     [InlineData("fuck you, you shit", "happy bunnies", "happy bunnies you, you happy bunnies")]
     [InlineData("asshole, i dont like you bitch", "flowers", "flowers, i dont like you flowers")]
+    [InlineData("fucking FUCKER, i dont like your doorknob", "---", "--- ---, i dont like your doorknob")]
+
     public void TestRemoveBadWords(string badText, string replacement, string niceText)
     {
         Assert.Equal(niceText, Utils.RemoveBadWords(badText, replacement));
@@ -41,10 +43,9 @@ public class UtilsTest(xLog output)
         // WILL take 5-10 min if no users added due to encryption
         var result = Utils.CreateMockUsers();
 
-        output.WriteLine("The test asserts that the users added " +
-            "are equivalent (the same) to the expected users!");
+        output.WriteLine("checks that users added are equivalent to the expected users");
         Assert.Equivalent(mockUsersNotInDb, result);
-        output.WriteLine("The test passed!");
+        output.WriteLine("Test Passed");
     }
 
     // method 3.5 -- tests 10 encryptions of passwords
@@ -97,7 +98,7 @@ public class UtilsTest(xLog output)
 
         foreach (var emailRow in emails)
         {
-            string email = emailRow["email"];
+            string email = Utils.RetrieveEmailDomain(emailRow["email"]);
             if (!uniqueEmails.ContainsKey(email))
             {
                 uniqueEmails[email] = 1;
@@ -109,8 +110,17 @@ public class UtilsTest(xLog output)
         }
 
         var emailCounter = Utils.CountDomainsFromUserEmails();
+        output.WriteLine("uniqueEmails Length " + uniqueEmails.Count());
+        output.WriteLine("emailCounter Length " + emailCounter.GetKeys().Length);
+        // output.WriteLine(emailCounter.GetEntries().ToString());
 
-        Assert.Equivalent(emailCounter, uniqueEmails);
+        // check if values are equal
+        // Assert.Equal(uniqueEmails.Values, emailCounter.GetValues());
+
+        // check if keys are equal
+        Assert.Equal(uniqueEmails.Keys, emailCounter.GetKeys());
+        // check if values are equal
+        Assert.Equal(Arr(uniqueEmails.Values), emailCounter.GetValues());
     }
 
     // method 5.5

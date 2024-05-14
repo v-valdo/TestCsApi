@@ -13,12 +13,13 @@ public static class Utils
     }
 
     // METOD 2
-    public static string RemoveBadWords(string badText, string niceWord)
+    public static string RemoveBadWords(string comment, string replacement)
     {
         var badWordsFromFile = File.ReadAllText(Path.Combine("json", "bad-words.json"));
         Arr badWords = JSON.Parse(badWordsFromFile);
 
-        string niceText = Regex.Replace(badText, "\\b" + string.Join("\\b|\\b", badWords) + "\\b", niceWord);
+        // \b -- https://www.regular-expressions.info/wordboundaries.html
+        string niceText = Regex.Replace(comment, "\\b" + string.Join("\\b|\\b", badWords) + "\\b", replacement, RegexOptions.IgnoreCase);
 
         return niceText;
     }
