@@ -78,7 +78,7 @@ public static class Utils
 
     public static string GeneratePasswordFromEmail(string email)
     {
-        return char.ToUpper(email[0]) + email.Substring(1);
+        return char.ToUpper(email[0]) + email.Substring(1) + "1";
     }
 
     // metod 4

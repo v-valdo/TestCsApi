@@ -6,6 +6,8 @@ public class UtilsTest(xLog output)
     [InlineData("testPassword1234", false)]
     [InlineData("testPassword1234%", true)]
     [InlineData("testPa!", false)]
+    [InlineData("testÄrens!1234", true)]
+
 
     public void TestIsPasswordStrongEnough(string password, bool result)
     {
@@ -39,24 +41,20 @@ public class UtilsTest(xLog output)
         // WILL take 5-10 min if no users added due to encryption
         var result = Utils.CreateMockUsers();
 
-        // Assert that the CreateMockUsers only return
-        // newly created users in the db
-        output.WriteLine($"The test expected that {mockUsersNotInDb.Length} users should be added.");
-        output.WriteLine($"And {result.Length} users were added.");
-        output.WriteLine("The test also asserts that the users added " +
+        output.WriteLine("The test asserts that the users added " +
             "are equivalent (the same) to the expected users!");
         Assert.Equivalent(mockUsersNotInDb, result);
         output.WriteLine("The test passed!");
     }
 
-    // method 3.5
+    // method 3.5 -- tests 10 encryptions of passwords
     [Fact]
     public void TestPasswordGenerationAndEncryption()
     {
         Arr users = SQLQuery("select email, password from users limit 10");
         foreach (var user in users)
         {
-            string passswordBeforeEncryption = Utils.GeneratePasswordFromEmail(user.email) + "1";
+            string passswordBeforeEncryption = Utils.GeneratePasswordFromEmail(user.email);
             output.WriteLine("before encr: " + passswordBeforeEncryption);
             string encryptedPassword = Password.Encrypt(passswordBeforeEncryption);
             Assert.True(Password.Verify(passswordBeforeEncryption, encryptedPassword));
