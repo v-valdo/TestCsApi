@@ -14,4 +14,4 @@ Globals = Obj(new
 //Log(WebApp.Utils.CountDomainsFromUserEmails());
 
 // WebApp.Utils.CreateMockUsers();
-//Server.Start();
+Server.Start();
