@@ -7,8 +7,6 @@ public class UtilsTest(xLog output)
     [InlineData("testPassword1234%", true)]
     [InlineData("testPa!", false)]
     [InlineData("testÄrens!1234", true)]
-
-
     public void TestIsPasswordStrongEnough(string password, bool result)
     {
         Assert.Equal(Utils.IsPasswordStrongEnough(password), result);

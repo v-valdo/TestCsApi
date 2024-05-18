@@ -42,9 +42,8 @@ public static class Utils
 
             if (existingUser == null)
             {
-                //// ---> Uncomment comments below to RUN encryption!! <<<-
-
-                // user.password = GeneratePasswordFromEmail(user.email) + "1";
+                //// ---> Uncomment comments below to RUN encryption w/ original pw:s!! <<<-
+                // user.password = GeneratePasswordFromEmail(user.email);
                 if (!IsPasswordStrongEnough(user.password))
                 {
                     user.password = "InsecurePassword";
