@@ -1,6 +1,6 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 
-Given('that I am on the products page', () => {
+Given('that I land on the products page', () => {
   cy.visit('/products');
 });
 
