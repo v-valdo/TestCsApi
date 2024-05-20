@@ -3,3 +3,6 @@ bin
 obj
 Backend/_db.sqlite3
 Dyndata
+
+# ignoring node modules (for newman)
+node_modules

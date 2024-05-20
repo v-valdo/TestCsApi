@@ -9,7 +9,7 @@
 If you make structural changes to the db or add important data:
 * It's fine to make these changes in Backend/_db.sqlite3.
 * That way you can check out that they work with the backend!
-
+ 
 To commit them to git:
 * Turn off the backend/server!
 * Make a copy of Backend/_db.sqlite3 to DbTemplate/_db.sqlite3.
