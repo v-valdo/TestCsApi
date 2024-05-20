@@ -2,7 +2,7 @@ Feature: As a user I want the description to match the products
 
     Scenario Outline: Check that the descriptions for each product are correctr
         Given that I pay a visit to the product page
-        When I put the category to "Alla"
+        When I change the category to "Alla"
         Then I should see the description "<description>" for the product "<product>"
 
         Examples:

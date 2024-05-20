@@ -2,9 +2,9 @@ name: .NET Core Desktop
 
 on:
   push:
-    branches: [ "endpoint-testing" ]
+    branches: [ "ui-testing" ]
   pull_request:
-    branches: [ "endpoint-testing" ]
+    branches: [ "ui-testing" ]
 
 jobs:
 
@@ -49,3 +49,8 @@ jobs:
     - name: Run the endpoint tests
       shell: bash
       run: cd endpoint-testing && npm test
+
+      # Run ui tests
+      - name: Run the ui-tests
+      shell: bash
+      run: cd ui-tests && npm install & npm run test-ui-cli

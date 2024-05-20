@@ -4,7 +4,7 @@ Given('that I pay a visit to the product page', () => {
   cy.visit("/products");
 });
 
-When('I put the category to {string}', (category) => {
+When('I change the category to {string}', (category) => {
   cy.get("#categories").select(category);
 });
 
