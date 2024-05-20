@@ -1,5 +1,5 @@
 Feature: As a user, I should see the right prices for products in the chosen category
-    Scenario Outline: Check that all products in MIDI Keyboards show the right price
+    Scenario Outline: Check that all products in specific categories show the right price
         Given that I go to the product page
         When I set the category to "<category>"
         Then I should see price "<price>" for product "<product>"
