@@ -1,4 +1,4 @@
-Feature: As user I want be presented with all available products when I specify category to All
+Feature: As a user I want to be presented with all available products when I specify category to All
 
     Scenario Outline: Check that the category choice "Alla" shows <product>.
         Given that I am on the product page

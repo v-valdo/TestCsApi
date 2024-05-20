@@ -1,4 +1,4 @@
-Feature: As user I want to be able to see the correct products listed when I have chosen a category so that I can easily filter the product list by category.
+Feature: As a user I want to be able to see the correct products listed when I have chosen a category so that I can easily filter the product list by category.
 
   Scenario Outline: Check that the category <category> shows the product <product>.
     Given that I land on the products page
